@@ -17,10 +17,18 @@ public class ListenerClass {
 	/*
 	 * Annotation that marks a method to be the target of a JMS message 
 	 * listener on the specified destination.
-	 * The containerFactory identifies the org.springframework.jms.config.JmsListenerContainerFactory
-	 * to use to build the JMS listener container. If not set, a default container factory is assumed
-	 * to be available with a bean name of jmsListenerContainerFactory unless an explicit default has
-	 * been provided through configuration.
+	 * Annotated JMS listener methods are allowed to have flexible signatures :
+
+	 * javax.jms.Session to get access to the JMS session
+	 * javax.jms.Message or one of its subclasses to get access to the raw JMS message
+	 * org.springframework.messaging.Message to use Spring's messaging abstraction counterpart
+     * @Payload-annotated method arguments, including support for validation
+     * @Header-annotated method arguments to extract specific header values, including 
+     * standard JMS headers defined by org.springframework.jms.support.JmsHeaders
+	 * @Headers-annotated method argument that must also be assignable to java.util.Map for obtaining access to all headers
+	 * org.springframework.messaging.MessageHeaders arguments for obtaining access to all headers
+     * org.springframework.messaging.support.MessageHeaderAccessor or org.springframework.jms.support.JmsMessageHeaderAccessor
+     * for convenient access to all method arguments
 	 */
 	@JmsListener(destination = JmsConfig.MY_QUEUE)
 	public void listen(@Payload FirstMessage msg,
